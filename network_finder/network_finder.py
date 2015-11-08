@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from bisect import bisect_left, bisect_right
 from ipaddress import ip_network
 
@@ -110,13 +111,3 @@ class NetworkFinder(object):
             i -= 1
 
         return ret
-
-
-if __name__ == '__main__':
-    network_finder = NetworkFinder()
-    network_finder.add('10.0.0.0/8')
-    network_finder.add('10.0.0.0/16')
-    network_finder.add('10.0.0.0/24')
-    network_finder.add('10.0.0.0/32')
-    network_finder.add('10.0.1.0/24')
-    network_finder.add('10.1.0.0/16')

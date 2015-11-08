@@ -1,5 +1,12 @@
+from __future__ import unicode_literals
 from unittest import TestCase
 from network_finder import NetworkFinder
+
+# Python 2 does not have TestCase.assertCountEqual
+try:
+    TestCase.assertCountEqual = TestCase.assertItemsEqual
+except AttributeError:
+    pass
 
 
 class NetworkFinderTestCase(TestCase):

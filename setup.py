@@ -1,5 +1,12 @@
 from setuptools import setup, find_packages
 
+try:
+    import ipaddress  # noqa
+except ImportError:
+    install_requires = ['ipaddress']
+else:
+    install_requires = []
+
 setup(
     name='network_finder',
     version='0.1',
@@ -21,10 +28,14 @@ setup(
         'Intended Audience :: Information Technology',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
+
     packages=find_packages(include=['network_finder']),
     test_suite='tests',
+
+    install_requires=install_requires
 )
