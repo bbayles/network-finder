@@ -15,7 +15,7 @@ setup(
 
     description='Matches IP addresses to encompassing networks',
     long_description=(
-        'This project provides a means of matching IP (IPv4 and IPv6) '
+        'This project provides a means of matching IP (version 4)'
         'addresses and subnets to networks that contain them. For example, '
         '192.0.2.128 is contained by 192.0.2.0/24.'
     ),
