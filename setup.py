@@ -1,4 +1,3 @@
-from __future__ import unicode_literals
 from setuptools import Extension, find_packages, setup
 
 cython_extension = Extension(
