@@ -1,57 +1,53 @@
 from __future__ import unicode_literals
 from bisect import bisect_left, bisect_right
 from functools import total_ordering
-from socket import inet_aton, inet_ntoa
+from socket import AF_INET6, inet_aton, inet_ntoa, inet_ntop, inet_pton
 from struct import Struct
 
-
 ipv4_struct = Struct('!I')
+ipv6_struct = Struct('!QQ')
 
 
-def ipv4_to_int(ip, unpack=ipv4_struct.unpack, inet_aton=inet_aton):
-    return unpack(inet_aton(ip))[0]
-
-
-def ipv4_from_int(ip_int, pack=ipv4_struct.pack, inet_ntoa=inet_ntoa):
-    return inet_ntoa(pack(ip_int))
-
-
-def ipv4_mask(length, ALL_ONES=(1 << 32) - 1):
-    if not (0 <= length <= 32):
+def ip_mask(length, bits):
+    if not (0 <= length <= bits):
         raise ValueError('Invalid length: {}'.format(length))
 
-    return ALL_ONES ^ (ALL_ONES >> length)
+    all_ones = (1 << bits) - 1
+    return all_ones ^ (all_ones >> length)
 
 
 @total_ordering
-class IPv4Network(object):
+class BaseIPNetwork(object):
     __slots__ = ['net_int', 'bcast_int', 'length', 'data']
 
     def __init__(self, cidr, data=None):
         cidr = cidr.split('/')
         if len(cidr) == 1:
-            length = 32
+            length = self.bits
         elif len(cidr) == 2:
             length = int(cidr[1])
         else:
             raise ValueError('Invalid IPv4 CIDR notation: {}'.format(cidr))
 
         net = cidr[0]
-        mask_int = ipv4_mask(length)
-        span = (1 << (32 - length)) - 1
+        mask_int = self.mask_cache[length]
+        span = (1 << (self.bits - length)) - 1
 
         self.length = length
-        self.net_int = ipv4_to_int(net) & mask_int
+        self.net_int = self.ip_to_int(net) & mask_int
         self.bcast_int = self.net_int + span
         self.data = data
 
     @property
     def network_address(self):
-        return ipv4_from_int(self.net_int)
+        return self.ip_from_int(self.net_int)
 
     @property
     def broadcast_address(self):
-        return ipv4_from_int(self.bcast_int)
+        return self.ip_from_int(self.bcast_int)
+
+    def __hash__(self):
+        return hash((self.net_int, self.length))
 
     def __eq__(self, other):
         return (
@@ -77,16 +73,48 @@ class IPv4Network(object):
         return '{}/{}'.format(self.network_address, self.length)
 
 
-class NetworkFinder(object):
-    def __init__(self):
-        self._network_list = []
+class IPv4Network(BaseIPNetwork):
+    __slots__ = []
+    bits = 32
+    mask_cache = {length: ip_mask(length, 32) for length in range(32 + 1)}
 
-    def add(self, cidr):
+    @staticmethod
+    def ip_to_int(ip, unpack=ipv4_struct.unpack, inet_aton=inet_aton):
+        return unpack(inet_aton(ip))[0]
+
+    @staticmethod
+    def ip_from_int(ip_int, pack=ipv4_struct.pack, inet_ntoa=inet_ntoa):
+        return inet_ntoa(pack(ip_int))
+
+
+class IPv6Network(BaseIPNetwork):
+    __slots__ = []
+    bits = 128
+    mask_cache = {length: ip_mask(length, 128) for length in range(128 + 1)}
+
+    @staticmethod
+    def ip_to_int(
+        ip, unpack=ipv6_struct.unpack, inet_pton=inet_pton, af=AF_INET6,
+    ):
+        unpacked = unpack(inet_pton(af, ip))
+        return (unpacked[0] << 64) | unpacked[1]
+
+    @staticmethod
+    def ip_from_int(ip_int, pack=ipv6_struct.pack, af=AF_INET6):
+        return inet_ntop(af, pack(ip_int >> 64, ip_int & 0xffffffffffffffff))
+
+
+class NetworkFinder(object):
+    def __init__(self, IPNetwork=IPv4Network):
+        self._network_list = []
+        self.IPNetwork = IPNetwork
+
+    def add(self, cidr, data=None):
         """
         Inserts the network described by `cidr`. Returns the inserted
         network object. Does not insert duplicate networks.
         """
-        network = IPv4Network(cidr)
+        network = self.IPNetwork(cidr, data)
 
         # If the network is already present, don't add another instance
         i = bisect_right(self._network_list, network)
@@ -101,7 +129,7 @@ class NetworkFinder(object):
         Deletes the network described by `cidr`. Raises KeyError if the network
         is not found.
         """
-        network = IPv4Network(cidr)
+        network = self.IPNetwork(cidr)
         i = bisect_right(self._network_list, network)
         if i and network == self._network_list[i - 1]:
             del self._network_list[i - 1]
@@ -113,7 +141,7 @@ class NetworkFinder(object):
         Finds the network described by `cidr`. Returns None if there is no
         match.
         """
-        network = IPv4Network(cidr)
+        network = self.IPNetwork(cidr)
         i = bisect_right(self._network_list, network)
         if i:
             found = self._network_list[i - 1]
@@ -127,7 +155,7 @@ class NetworkFinder(object):
         Finds the network with the longest prefix that matches the network
         described by `cidr`. Returns None if there is no match.
         """
-        network = IPv4Network(cidr)
+        network = self.IPNetwork(cidr)
         i = bisect_right(self._network_list, network)
         while i:
             found = self._network_list[i - 1]
@@ -142,7 +170,7 @@ class NetworkFinder(object):
         Finds the network with the shortest prefix that matches the network
         described by `cidr`. Returns None if there is no match.
         """
-        network = IPv4Network(cidr)
+        network = self.IPNetwork(cidr)
         i = bisect_right(self._network_list, network)
         ret = None
         while i:
@@ -158,7 +186,7 @@ class NetworkFinder(object):
         Finds the networks that are contained by the network described by
         `cidr`. Returns an empty list if there are none.
         """
-        network = IPv4Network(cidr)
+        network = self.IPNetwork(cidr)
         i = bisect_left(self._network_list, network)
         ret = []
         while i != len(self._network_list):
@@ -174,7 +202,7 @@ class NetworkFinder(object):
         Finds the networks that are have a matching prefix with the network
         described by `cidr`. Returns an empty list if there are none.
         """
-        network = IPv4Network(cidr)
+        network = self.IPNetwork(cidr)
         i = bisect_right(self._network_list, network)
         ret = []
         while i:

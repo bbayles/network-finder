@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from unittest import TestCase
 from network_finder import NetworkFinder
+from network_finder.network_finder import IPv6Network
 
 # Python 2 does not have TestCase.assertCountEqual
 try:
@@ -125,38 +126,39 @@ class NetworkFinderTestCase(TestCase):
             actual = [str(x) for x in self.inst.search_covering(arg)]
             self.assertCountEqual(actual, expected)
 
-    def _test_v6(self):
-        # IPv6 not supported yet
-        slash_16 = self.inst.add('fd00:0000:0000:0000::/16')
-        slash_32 = self.inst.add('fd00:0000:0000:0000::/32')
-        slash_48 = self.inst.add('fd00:0000:0000:0000::/48')
-        slash_64 = self.inst.add('fd00:0000:0000:0000::/64')
+    def test_v6(self):
+        inst = NetworkFinder(IPv6Network)
+
+        slash_16 = inst.add('fd00:0000:0000:0000::/16')
+        slash_32 = inst.add('fd00:0000:0000:0000::/32')
+        slash_48 = inst.add('fd00:0000:0000:0000::/48')
+        slash_64 = inst.add('fd00:0000:0000:0000::/64')
         self.assertEqual(
-            self.inst._network_list, [slash_16, slash_32, slash_48, slash_64]
+            inst._network_list, [slash_16, slash_32, slash_48, slash_64]
         )
 
-        self.inst.delete('fd00::/32')
+        inst.delete('fd00::/32')
         self.assertEqual(
-            self.inst._network_list, [slash_16, slash_48, slash_64]
+            inst._network_list, [slash_16, slash_48, slash_64]
         )
 
-        self.assertEqual(self.inst.search_exact('fd00::/64'), slash_64)
-        self.assertIsNone(self.inst.search_exact('fd00:0001::/64'))
+        self.assertEqual(inst.search_exact('fd00::/64'), slash_64)
+        self.assertIsNone(inst.search_exact('fd00:0001::/64'))
 
-        self.assertEqual(self.inst.search_best('fd00::/64'), slash_64)
+        self.assertEqual(inst.search_best('fd00::/64'), slash_64)
         self.assertEqual(
-            self.inst.search_best('fd00:0000:0000:0001::/64'), slash_48
+            inst.search_best('fd00:0000:0000:0001::/64'), slash_48
         )
 
-        self.assertEqual(self.inst.search_worst('fd00::/64'), slash_16)
+        self.assertEqual(inst.search_worst('fd00::/64'), slash_16)
         self.assertEqual(
-            self.inst.search_worst('fd00:0000:0000:0001::/64'), slash_16
+            inst.search_worst('fd00:0000:0000:0001::/64'), slash_16
         )
 
         self.assertEqual(
-            self.inst.search_covered('fd00::/32'), [slash_48, slash_64]
+            inst.search_covered('fd00::/32'), [slash_48, slash_64]
         )
 
         self.assertCountEqual(
-            self.inst.search_covering('fd00::/48'), [slash_16, slash_48]
+            inst.search_covering('fd00::/48'), [slash_16, slash_48]
         )
