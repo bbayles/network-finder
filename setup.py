@@ -1,4 +1,10 @@
-from setuptools import setup, find_packages
+from __future__ import unicode_literals
+from setuptools import Extension, find_packages, setup
+
+cython_extension = Extension(
+    'network_finder.network_finder', ['network_finder/network_finder.c']
+)
+
 
 setup(
     name='network_finder',
@@ -29,4 +35,5 @@ setup(
 
     packages=find_packages(include=['network_finder']),
     test_suite='tests',
+    ext_modules=[cython_extension],
 )
