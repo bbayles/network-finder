@@ -1,7 +1,8 @@
 from os import getenv
+from platform import python_implementation
 from setuptools import Extension, find_packages, setup
 
-if getenv('NO_CYTHON') == 'true':
+if (getenv('NO_CYTHON') == 'true') or (python_implementation() != 'CPython'):
     ext_modules = []
 else:
     cython_extension = Extension(
