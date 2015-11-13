@@ -16,7 +16,7 @@ else:
 setup(
     name='network_finder',
     version='0.1',
-    license='Apache',
+    license='MIT',
     url='https://github.com/bbayles/network-finder',
 
     description='Matches IP addresses to encompassing networks',
