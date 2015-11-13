@@ -65,9 +65,9 @@ class BaseIPNetwork(object):
         return self.length < other.length
 
     def __contains__(self, other):
-        return (
-            self.net_int <= other.net_int <= other.bcast_int <= self.bcast_int
-        )
+        # self.net_int must be <= other.net_int because of the way we're
+        # maintaining sorted order. But don't use this class elsehwere.
+        return other.bcast_int <= self.bcast_int
 
     def __repr__(self):
         return '{}/{}'.format(self.network_address, self.length)
@@ -109,7 +109,7 @@ class NetworkFinder(object):
         self._network_list = []
         self.IPNetwork = IPNetwork
 
-    def add(self, cidr, data=None):
+    def add(self, cidr, data=None, bisect_right=bisect_right):
         """
         Inserts the network described by `cidr`. Returns the inserted
         network object. Does not insert duplicate networks.
@@ -124,7 +124,7 @@ class NetworkFinder(object):
         self._network_list.insert(i, network)
         return network
 
-    def delete(self, cidr):
+    def delete(self, cidr, bisect_right=bisect_right):
         """
         Deletes the network described by `cidr`. Raises KeyError if the network
         is not found.
@@ -136,7 +136,7 @@ class NetworkFinder(object):
         else:
             raise KeyError('{} not found'.format(network))
 
-    def search_exact(self, cidr):
+    def search_exact(self, cidr, bisect_right=bisect_right):
         """
         Finds the network described by `cidr`. Returns None if there is no
         match.
@@ -150,7 +150,7 @@ class NetworkFinder(object):
 
         return None
 
-    def search_best(self, cidr):
+    def search_best(self, cidr, bisect_right=bisect_right):
         """
         Finds the network with the longest prefix that matches the network
         described by `cidr`. Returns None if there is no match.
@@ -165,7 +165,7 @@ class NetworkFinder(object):
 
         return None
 
-    def search_worst(self, cidr):
+    def search_worst(self, cidr, bisect_right=bisect_right):
         """
         Finds the network with the shortest prefix that matches the network
         described by `cidr`. Returns None if there is no match.
@@ -181,7 +181,7 @@ class NetworkFinder(object):
 
         return ret
 
-    def search_covered(self, cidr):
+    def search_covered(self, cidr, bisect_left=bisect_left):
         """
         Finds the networks that are contained by the network described by
         `cidr`. Returns an empty list if there are none.
@@ -197,7 +197,7 @@ class NetworkFinder(object):
 
         return ret
 
-    def search_covering(self, cidr):
+    def search_covering(self, cidr, bisect_right=bisect_right):
         """
         Finds the networks that are have a matching prefix with the network
         described by `cidr`. Returns an empty list if there are none.

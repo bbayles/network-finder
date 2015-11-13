@@ -1,8 +1,15 @@
+from os import getenv
 from setuptools import Extension, find_packages, setup
 
-cython_extension = Extension(
-    'network_finder.network_finder', ['network_finder/network_finder.c']
-)
+if getenv('NO_CYTHON') == 'true':
+    ext_modules = []
+else:
+    cython_extension = Extension(
+        'network_finder.network_finder',
+        ['network_finder/network_finder.c'],
+        extra_compile_args=["-O3"]
+    )
+    ext_modules = [cython_extension]
 
 
 setup(
@@ -34,5 +41,5 @@ setup(
 
     packages=find_packages(include=['network_finder']),
     test_suite='tests',
-    ext_modules=[cython_extension],
+    ext_modules=ext_modules,
 )
