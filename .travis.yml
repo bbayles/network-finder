@@ -1,0 +1,21 @@
+sudo: false
+
+language: python
+
+python:
+    - "2.7"
+    - "3.4"
+    - "3.5"
+    - "pypy"
+
+install:
+    - pip install --upgrade Cython setuptools coveralls
+
+script:
+    - coverage run --branch --include="network_finder/*" setup.py test
+
+after_success:
+    - coveralls
+
+notifications:
+    email: false
