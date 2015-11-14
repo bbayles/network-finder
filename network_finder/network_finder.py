@@ -65,12 +65,19 @@ class BaseIPNetwork(object):
         return self.length < other.length
 
     def __contains__(self, other):
-        # self.net_int must be <= other.net_int because of the way we're
-        # maintaining sorted order. But don't use this class elsehwere.
-        return other.bcast_int <= self.bcast_int
+        return (
+            self.net_int <= other.net_int <= other.bcast_int <= self.bcast_int
+        )
 
     def __repr__(self):
+        return "{}('{}/{}')".format(
+            self.__class__.__name__, self.network_address, self.length
+        )
+
+    def __str__(self):
         return '{}/{}'.format(self.network_address, self.length)
+
+    __unicode__ = __str__
 
 
 class IPv4Network(BaseIPNetwork):
