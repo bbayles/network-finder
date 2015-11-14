@@ -9,7 +9,7 @@ python:
     - "pypy"
 
 install:
-    - pip install --upgrade Cython setuptools coveralls
+    - pip install --upgrade setuptools coveralls
 
 script:
     - coverage run --branch --include="network_finder/*" setup.py test

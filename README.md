@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/bbayles/network-finder.svg?branch=master)](https://travis-ci.org/bbayles/network-finder)
+[![Coverage Status](https://coveralls.io/repos/bbayles/network-finder/badge.svg?branch=master&service=github)](https://coveralls.io/github/bbayles/network-finder?branch=master)
+
 ## network-finder
 
 `network_finder` is a Python module for determining whether an IP address or
