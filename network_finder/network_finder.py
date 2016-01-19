@@ -4,8 +4,8 @@ from functools import total_ordering
 from socket import AF_INET6, inet_aton, inet_ntoa, inet_ntop, inet_pton
 from struct import Struct
 
-ipv4_struct = Struct('!I')
-ipv6_struct = Struct('!QQ')
+ipv4_struct = Struct(b'!I')
+ipv6_struct = Struct(b'!QQ')
 
 
 def ip_mask(length, bits):
