@@ -933,7 +933,7 @@ static PyObject *__pyx_n_s_BaseIPNetwork___repr;
 static PyObject *__pyx_n_s_BaseIPNetwork___str;
 static PyObject *__pyx_n_s_BaseIPNetwork_broadcast_address;
 static PyObject *__pyx_n_s_BaseIPNetwork_network_address;
-static PyObject *__pyx_kp_u_I;
+static PyObject *__pyx_kp_b_I;
 static PyObject *__pyx_n_s_IPNetwork;
 static PyObject *__pyx_n_s_IPv4Network;
 static PyObject *__pyx_n_s_IPv4Network_ip_from_int;
@@ -953,7 +953,7 @@ static PyObject *__pyx_n_s_NetworkFinder_search_covered;
 static PyObject *__pyx_n_s_NetworkFinder_search_covering;
 static PyObject *__pyx_n_s_NetworkFinder_search_exact;
 static PyObject *__pyx_n_s_NetworkFinder_search_worst;
-static PyObject *__pyx_kp_u_QQ;
+static PyObject *__pyx_kp_b_QQ;
 static PyObject *__pyx_n_s_Struct;
 static PyObject *__pyx_n_s_ValueError;
 static PyObject *__pyx_kp_u__3;
@@ -6306,7 +6306,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_BaseIPNetwork___str, __pyx_k_BaseIPNetwork___str, sizeof(__pyx_k_BaseIPNetwork___str), 0, 0, 1, 1},
   {&__pyx_n_s_BaseIPNetwork_broadcast_address, __pyx_k_BaseIPNetwork_broadcast_address, sizeof(__pyx_k_BaseIPNetwork_broadcast_address), 0, 0, 1, 1},
   {&__pyx_n_s_BaseIPNetwork_network_address, __pyx_k_BaseIPNetwork_network_address, sizeof(__pyx_k_BaseIPNetwork_network_address), 0, 0, 1, 1},
-  {&__pyx_kp_u_I, __pyx_k_I, sizeof(__pyx_k_I), 0, 1, 0, 0},
+  {&__pyx_kp_b_I, __pyx_k_I, sizeof(__pyx_k_I), 0, 0, 0, 0},
   {&__pyx_n_s_IPNetwork, __pyx_k_IPNetwork, sizeof(__pyx_k_IPNetwork), 0, 0, 1, 1},
   {&__pyx_n_s_IPv4Network, __pyx_k_IPv4Network, sizeof(__pyx_k_IPv4Network), 0, 0, 1, 1},
   {&__pyx_n_s_IPv4Network_ip_from_int, __pyx_k_IPv4Network_ip_from_int, sizeof(__pyx_k_IPv4Network_ip_from_int), 0, 0, 1, 1},
@@ -6326,7 +6326,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_NetworkFinder_search_covering, __pyx_k_NetworkFinder_search_covering, sizeof(__pyx_k_NetworkFinder_search_covering), 0, 0, 1, 1},
   {&__pyx_n_s_NetworkFinder_search_exact, __pyx_k_NetworkFinder_search_exact, sizeof(__pyx_k_NetworkFinder_search_exact), 0, 0, 1, 1},
   {&__pyx_n_s_NetworkFinder_search_worst, __pyx_k_NetworkFinder_search_worst, sizeof(__pyx_k_NetworkFinder_search_worst), 0, 0, 1, 1},
-  {&__pyx_kp_u_QQ, __pyx_k_QQ, sizeof(__pyx_k_QQ), 0, 1, 0, 0},
+  {&__pyx_kp_b_QQ, __pyx_k_QQ, sizeof(__pyx_k_QQ), 0, 0, 0, 0},
   {&__pyx_n_s_Struct, __pyx_k_Struct, sizeof(__pyx_k_Struct), 0, 0, 1, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_kp_u__3, __pyx_k__3, sizeof(__pyx_k__3), 0, 1, 0, 0},
@@ -6445,22 +6445,22 @@ static int __Pyx_InitCachedConstants(void) {
   /* "network_finder/network_finder.py":7
  * from struct import Struct
  * 
- * ipv4_struct = Struct('!I')             # <<<<<<<<<<<<<<
- * ipv6_struct = Struct('!QQ')
+ * ipv4_struct = Struct(b'!I')             # <<<<<<<<<<<<<<
+ * ipv6_struct = Struct(b'!QQ')
  * 
  */
-  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_u_I); if (unlikely(!__pyx_tuple__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_b_I); if (unlikely(!__pyx_tuple__5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
   /* "network_finder/network_finder.py":8
  * 
- * ipv4_struct = Struct('!I')
- * ipv6_struct = Struct('!QQ')             # <<<<<<<<<<<<<<
+ * ipv4_struct = Struct(b'!I')
+ * ipv6_struct = Struct(b'!QQ')             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_u_QQ); if (unlikely(!__pyx_tuple__6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_b_QQ); if (unlikely(!__pyx_tuple__6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 8; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
@@ -6957,7 +6957,7 @@ PyMODINIT_FUNC PyInit_network_finder(void)
  * from socket import AF_INET6, inet_aton, inet_ntoa, inet_ntop, inet_pton
  * from struct import Struct             # <<<<<<<<<<<<<<
  * 
- * ipv4_struct = Struct('!I')
+ * ipv4_struct = Struct(b'!I')
  */
   __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 5; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
@@ -6976,8 +6976,8 @@ PyMODINIT_FUNC PyInit_network_finder(void)
   /* "network_finder/network_finder.py":7
  * from struct import Struct
  * 
- * ipv4_struct = Struct('!I')             # <<<<<<<<<<<<<<
- * ipv6_struct = Struct('!QQ')
+ * ipv4_struct = Struct(b'!I')             # <<<<<<<<<<<<<<
+ * ipv6_struct = Struct(b'!QQ')
  * 
  */
   __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_Struct); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 7; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -6990,8 +6990,8 @@ PyMODINIT_FUNC PyInit_network_finder(void)
 
   /* "network_finder/network_finder.py":8
  * 
- * ipv4_struct = Struct('!I')
- * ipv6_struct = Struct('!QQ')             # <<<<<<<<<<<<<<
+ * ipv4_struct = Struct(b'!I')
+ * ipv6_struct = Struct(b'!QQ')             # <<<<<<<<<<<<<<
  * 
  * 
  */
