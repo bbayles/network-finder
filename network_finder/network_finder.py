@@ -27,7 +27,7 @@ class BaseIPNetwork(object):
         elif len(cidr) == 2:
             length = int(cidr[1])
         else:
-            raise ValueError('Invalid IPv4 CIDR notation: {}'.format(cidr))
+            raise ValueError('Invalid CIDR notation: {}'.format(cidr))
 
         net = cidr[0]
         mask_int = self.mask_cache[length]
