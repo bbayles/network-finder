@@ -79,13 +79,14 @@ class IPNetworkTests(TestCase):
             ip_mask(129, bits=128)
 
     def test_init_v4(self):
-        host = IPv4Network('192.0.2.1', 'RFC 5737 host')
-        self.assertEqual(host.net_int, 3221225985)
-        self.assertEqual(host.bcast_int, 3221225985)
-        self.assertEqual(host.length, 32)
-        self.assertEqual(host.data, 'RFC 5737 host')
-        self.assertEqual(host.network_address, '192.0.2.1')
-        self.assertEqual(host.broadcast_address, '192.0.2.1')
+        for host_addr in ('192.0.2.1', 3221225985):
+            host = IPv4Network(host_addr, 'RFC 5737 host')
+            self.assertEqual(host.net_int, 3221225985)
+            self.assertEqual(host.bcast_int, 3221225985)
+            self.assertEqual(host.length, 32)
+            self.assertEqual(host.data, 'RFC 5737 host')
+            self.assertEqual(host.network_address, '192.0.2.1')
+            self.assertEqual(host.broadcast_address, '192.0.2.1')
 
         net = IPv4Network('192.0.2.1/24', 'RFC 5737 net')
         self.assertEqual(net.net_int, 3221225984)
@@ -102,12 +103,18 @@ class IPNetworkTests(TestCase):
                 IPv4Network(bad_arg)
 
     def test_init_v6(self):
-        host = IPv6Network('2001:0db8::')
-        self.assertEqual(host.net_int, 0x20010db8000000000000000000000000)
-        self.assertEqual(host.bcast_int, 0x20010db8000000000000000000000000)
-        self.assertEqual(host.length, 128)
-        self.assertEqual(host.network_address, '2001:db8::')
-        self.assertEqual(host.broadcast_address, '2001:db8::')
+        for host_addr in (
+            '2001:0db8::',
+            0x20010db8000000000000000000000000,
+        ):
+            host = IPv6Network(host_addr)
+            self.assertEqual(host.net_int, 0x20010db8000000000000000000000000)
+            self.assertEqual(
+                host.bcast_int, 0x20010db8000000000000000000000000
+            )
+            self.assertEqual(host.length, 128)
+            self.assertEqual(host.network_address, '2001:db8::')
+            self.assertEqual(host.broadcast_address, '2001:db8::')
 
         net = IPv6Network('2001:0db8::/32')
         self.assertEqual(net.net_int, 0x20010db8000000000000000000000000)

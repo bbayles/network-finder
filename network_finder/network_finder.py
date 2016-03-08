@@ -21,20 +21,25 @@ class BaseIPNetwork(object):
     __slots__ = ['net_int', 'bcast_int', 'length', 'data']
 
     def __init__(self, cidr, data=None):
-        cidr = cidr.split('/')
-        if len(cidr) == 1:
+        if isinstance(cidr, int):
+            net_int = cidr
             length = self.bits
-        elif len(cidr) == 2:
-            length = int(cidr[1])
         else:
-            raise ValueError('Invalid CIDR notation: {}'.format(cidr))
+            cidr = cidr.split('/')
+            if len(cidr) == 1:
+                length = self.bits
+            elif len(cidr) == 2:
+                length = int(cidr[1])
+            else:
+                raise ValueError('Invalid CIDR notation: {}'.format(cidr))
 
-        net = cidr[0]
+            net_int = self.ip_to_int(cidr[0])
+
         mask_int = self.mask_cache[length]
         span = (1 << (self.bits - length)) - 1
 
         self.length = length
-        self.net_int = self.ip_to_int(net) & mask_int
+        self.net_int = net_int & mask_int
         self.bcast_int = self.net_int + span
         self.data = data
 
