@@ -3,7 +3,9 @@ from bisect import bisect_left, bisect_right
 from functools import total_ordering
 from socket import AF_INET6, inet_aton, inet_ntoa, inet_ntop, inet_pton
 from struct import Struct
+from sys import version_info
 
+integer_types = (int, long) if (version_info[0] == 2) else (int,)  # noqa
 ipv4_struct = Struct(b'!I')
 ipv6_struct = Struct(b'!QQ')
 
@@ -21,7 +23,7 @@ class BaseIPNetwork(object):
     __slots__ = ['net_int', 'bcast_int', 'length', 'data']
 
     def __init__(self, cidr, data=None):
-        if isinstance(cidr, int):
+        if isinstance(cidr, integer_types):
             net_int = cidr
             length = self.bits
         else:
