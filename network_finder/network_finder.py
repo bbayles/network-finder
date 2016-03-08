@@ -3,7 +3,9 @@ from bisect import bisect_left, bisect_right
 from functools import total_ordering
 from socket import AF_INET6, inet_aton, inet_ntoa, inet_ntop, inet_pton
 from struct import Struct
+from sys import version_info
 
+integer_types = (int, long) if (version_info[0] == 2) else (int,)  # noqa
 ipv4_struct = Struct(b'!I')
 ipv6_struct = Struct(b'!QQ')
 
@@ -21,20 +23,25 @@ class BaseIPNetwork(object):
     __slots__ = ['net_int', 'bcast_int', 'length', 'data']
 
     def __init__(self, cidr, data=None):
-        cidr = cidr.split('/')
-        if len(cidr) == 1:
+        if isinstance(cidr, integer_types):
+            net_int = cidr
             length = self.bits
-        elif len(cidr) == 2:
-            length = int(cidr[1])
         else:
-            raise ValueError('Invalid CIDR notation: {}'.format(cidr))
+            cidr = cidr.split('/')
+            if len(cidr) == 1:
+                length = self.bits
+            elif len(cidr) == 2:
+                length = int(cidr[1])
+            else:
+                raise ValueError('Invalid CIDR notation: {}'.format(cidr))
 
-        net = cidr[0]
+            net_int = self.ip_to_int(cidr[0])
+
         mask_int = self.mask_cache[length]
         span = (1 << (self.bits - length)) - 1
 
         self.length = length
-        self.net_int = self.ip_to_int(net) & mask_int
+        self.net_int = net_int & mask_int
         self.bcast_int = self.net_int + span
         self.data = data
 
@@ -126,7 +133,12 @@ class NetworkFinder(object):
         # If the network is already present, don't add another instance
         i = bisect_right(self._network_list, network)
         if i and network == self._network_list[i - 1]:
-            return network
+            existing = self._network_list[i - 1]
+            if data and existing.data:
+                existing.data.update(data)
+            elif data:
+                existing.data = data
+            return existing
 
         self._network_list.insert(i, network)
         return network
