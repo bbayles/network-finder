@@ -131,7 +131,12 @@ class NetworkFinder(object):
         # If the network is already present, don't add another instance
         i = bisect_right(self._network_list, network)
         if i and network == self._network_list[i - 1]:
-            return network
+            existing = self._network_list[i - 1]
+            if data and existing.data:
+                existing.data.update(data)
+            elif data:
+                existing.data = data
+            return existing
 
         self._network_list.insert(i, network)
         return network

@@ -253,7 +253,7 @@ class NetworkFinderTests(TestCase):
 
     def test_add(self):
         # The list of networks should maintain sorted order
-        slash_16 = self.inst.add('10.0.0.0/16')
+        slash_16 = self.inst.add('10.0.0.0/16', data={1: 2})
         self.assertEqual(self.inst._network_list, [slash_16])
 
         slash_8 = self.inst.add('10.0.0.0/8')
@@ -264,11 +264,12 @@ class NetworkFinderTests(TestCase):
             self.inst._network_list, [slash_8, slash_16, slash_24]
         )
 
-        # Duplicates are not allowed
-        self.inst.add('10.0.0.0/16')
+        # Duplicates are not allowed, but existing data should not be destroyed
+        node = self.inst.add('10.0.0.0/16')
         self.assertEqual(
             self.inst._network_list, [slash_8, slash_16, slash_24]
         )
+        self.assertEqual(node.data, {1: 2})
 
     def test_delete(self):
         slash_8 = self.inst.add('10.0.0.0/8')
