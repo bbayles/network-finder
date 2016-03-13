@@ -20,7 +20,7 @@ def ip_mask(length, bits):
 
 @total_ordering
 class BaseIPNetwork(object):
-    __slots__ = ['net_int', 'bcast_int', 'length', 'data']
+    __slots__ = ['net_int', 'bcast_int', 'length', '_data']
 
     def __init__(self, cidr, data=None):
         if isinstance(cidr, integer_types):
@@ -37,13 +37,16 @@ class BaseIPNetwork(object):
 
             net_int = self.ip_to_int(cidr[0])
 
+        if (data is not None) and (not isinstance(data, dict)):
+            raise ValueError('data argument must be a dict')
+
         mask_int = self.mask_cache[length]
         span = (1 << (self.bits - length)) - 1
 
         self.length = length
         self.net_int = net_int & mask_int
         self.bcast_int = self.net_int + span
-        self.data = data
+        self._data = data
 
     @property
     def network_address(self):
@@ -78,8 +81,8 @@ class BaseIPNetwork(object):
 
     def __getattr__(self, attr):
         try:
-            return self.data[attr]
-        except KeyError:
+            return self._data[attr]
+        except (TypeError, KeyError):
             raise AttributeError(attr)
 
     def __repr__(self):

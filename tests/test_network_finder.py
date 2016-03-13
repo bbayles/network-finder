@@ -80,19 +80,19 @@ class IPNetworkTests(TestCase):
 
     def test_init_v4(self):
         for host_addr in ('192.0.2.1', 3221225985):
-            host = IPv4Network(host_addr, 'RFC 5737 host')
+            host = IPv4Network(host_addr, {'name': 'RFC 5737 host'})
             self.assertEqual(host.net_int, 3221225985)
             self.assertEqual(host.bcast_int, 3221225985)
             self.assertEqual(host.length, 32)
-            self.assertEqual(host.data, 'RFC 5737 host')
+            self.assertEqual(host._data, {'name': 'RFC 5737 host'})
             self.assertEqual(host.network_address, '192.0.2.1')
             self.assertEqual(host.broadcast_address, '192.0.2.1')
 
-        net = IPv4Network('192.0.2.1/24', 'RFC 5737 net')
+        net = IPv4Network('192.0.2.1/24', {'name': 'RFC 5737 net'})
         self.assertEqual(net.net_int, 3221225984)
         self.assertEqual(net.bcast_int, 3221226239)
         self.assertEqual(net.length, 24)
-        self.assertEqual(net.data, 'RFC 5737 net')
+        self.assertEqual(net._data, {'name': 'RFC 5737 net'})
         self.assertEqual(net.network_address, '192.0.2.0')
         self.assertEqual(net.broadcast_address, '192.0.2.255')
 
@@ -101,6 +101,9 @@ class IPNetworkTests(TestCase):
         ):
             with self.assertRaises(Exception):
                 IPv4Network(bad_arg)
+
+        with self.assertRaises(ValueError):
+            IPv4Network('192.0.2.0/24', 'something')
 
     def test_init_v6(self):
         for host_addr in (
@@ -124,6 +127,9 @@ class IPNetworkTests(TestCase):
         self.assertEqual(
             net.broadcast_address, '2001:db8:ffff:ffff:ffff:ffff:ffff:ffff'
         )
+
+        with self.assertRaises(ValueError):
+            IPv6Network('2001:0db8::/32', 'something')
 
     def test_hash(self):
         v4_net_set = {
@@ -237,7 +243,7 @@ class IPNetworkTests(TestCase):
             self.assertEqual(IPv6Network.ip_to_int(ip_str), ip_int)
             self.assertEqual(IPv6Network.ip_from_int(ip_int), ip_str)
 
-    def test_attributes(self):
+    def test_getattr(self):
         v4_net = IPv4Network('192.0.2.0/24', data={'key_1': 'value_1'})
         self.assertEqual(v4_net.key_1, 'value_1')
         with self.assertRaises(AttributeError):
@@ -247,6 +253,10 @@ class IPNetworkTests(TestCase):
         self.assertEqual(v6_net.key_1, 'value_1')
         with self.assertRaises(AttributeError):
             v6_net.key_2
+
+        empty_net = IPv4Network('198.51.100.0/24')
+        with self.assertRaises(AttributeError):
+            empty_net.key_1
 
     def test_repr(self):
         v4_net = IPv4Network('192.0.2.0/24')
@@ -280,7 +290,7 @@ class NetworkFinderTests(TestCase):
         self.assertEqual(
             self.inst._network_list, [slash_8, slash_16, slash_24]
         )
-        self.assertEqual(node.data, {1: 2})
+        self.assertEqual(node._data, {1: 2})
 
     def test_delete(self):
         slash_8 = self.inst.add('10.0.0.0/8')
@@ -296,9 +306,9 @@ class NetworkFinderTests(TestCase):
     def test_user_data(self):
         # You should be able to store data on ip_network objects
         network = self.inst.add('192.0.2.1')
-        network.data = {'key': 'value'}
+        network._data = {'key': 'value'}
         found = self.inst.search_exact('192.0.2.1')
-        self.assertEqual(found.data['key'], 'value')
+        self.assertEqual(found._data['key'], 'value')
 
     def test_search_exact(self):
         slash_8 = self.inst.add('10.0.0.0/8')
