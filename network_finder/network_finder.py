@@ -85,6 +85,14 @@ class BaseIPNetwork(object):
         except (TypeError, KeyError):
             raise AttributeError(attr)
 
+    def __setattr__(self, attr, value):
+        try:
+            return super(BaseIPNetwork, self).__setattr__(attr, value)
+        except AttributeError:
+            if self._data is None:
+                self._data = {}
+            self._data[attr] = value
+
     def __repr__(self):
         return "{}('{}/{}')".format(
             self.__class__.__name__, self.network_address, self.length

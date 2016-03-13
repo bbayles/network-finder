@@ -245,11 +245,13 @@ class IPNetworkTests(TestCase):
 
     def test_getattr(self):
         v4_net = IPv4Network('192.0.2.0/24', data={'key_1': 'value_1'})
+        self.assertEqual(v4_net.length, 24)
         self.assertEqual(v4_net.key_1, 'value_1')
         with self.assertRaises(AttributeError):
             v4_net.key_2
 
         v6_net = IPv6Network('2001:db8::/32', data={'key_1': 'value_1'})
+        self.assertEqual(v6_net.length, 32)
         self.assertEqual(v6_net.key_1, 'value_1')
         with self.assertRaises(AttributeError):
             v6_net.key_2
@@ -257,6 +259,19 @@ class IPNetworkTests(TestCase):
         empty_net = IPv4Network('198.51.100.0/24')
         with self.assertRaises(AttributeError):
             empty_net.key_1
+
+    def test_setattr(self):
+        v4_net = IPv4Network('192.0.2.0/24', data={'key_1': 'value_1'})
+        v4_net.key_2 = 'value_2'
+        self.assertEqual(v4_net.key_2, 'value_2')
+
+        v6_net = IPv6Network('2001:db8::/32', data={'key_1': 'value_1'})
+        v6_net.key_2 = 'value_2'
+        self.assertEqual(v6_net.key_2, 'value_2')
+
+        empty_net = IPv4Network('198.51.100.0/24')
+        empty_net.key = 'value'
+        self.assertEqual(empty_net.key, 'value')
 
     def test_repr(self):
         v4_net = IPv4Network('192.0.2.0/24')
