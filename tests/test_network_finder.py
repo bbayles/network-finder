@@ -292,6 +292,13 @@ class NetworkFinderTests(TestCase):
         )
         self.assertEqual(node._data, {1: 2})
 
+        # Additional data should be stored for a duplicate
+        node = self.inst.add('10.0.0.0/16', data={3: 4})
+        self.assertEqual(
+            self.inst._network_list, [slash_8, slash_16, slash_24]
+        )
+        self.assertEqual(node._data, {1: 2, 3: 4})
+
     def test_delete(self):
         slash_8 = self.inst.add('10.0.0.0/8')
         slash_24 = self.inst.add('10.0.0.0/24')

@@ -4459,7 +4459,7 @@ static PyObject *__pyx_pf_14network_finder_14network_finder_13NetworkFinder_2add
  *         i = bisect_right(self._network_list, network)
  *         if i and network == self._network_list[i - 1]:             # <<<<<<<<<<<<<<
  *             existing = self._network_list[i - 1]
- *             if data and existing.data:
+ *             if data and existing._data:
  */
   __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_v_i); if (unlikely(__pyx_t_8 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_8) {
@@ -4487,8 +4487,8 @@ static PyObject *__pyx_pf_14network_finder_14network_finder_13NetworkFinder_2add
  *         i = bisect_right(self._network_list, network)
  *         if i and network == self._network_list[i - 1]:
  *             existing = self._network_list[i - 1]             # <<<<<<<<<<<<<<
- *             if data and existing.data:
- *                 existing.data.update(data)
+ *             if data and existing._data:
+ *                 existing._data.update(data)
  */
     __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_self, __pyx_n_s_network_list); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
@@ -4504,8 +4504,8 @@ static PyObject *__pyx_pf_14network_finder_14network_finder_13NetworkFinder_2add
     /* "network_finder/network_finder.py":146
  *         if i and network == self._network_list[i - 1]:
  *             existing = self._network_list[i - 1]
- *             if data and existing.data:             # <<<<<<<<<<<<<<
- *                 existing.data.update(data)
+ *             if data and existing._data:             # <<<<<<<<<<<<<<
+ *                 existing._data.update(data)
  *             elif data:
  */
     __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_v_data); if (unlikely(__pyx_t_8 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 146; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -4514,7 +4514,7 @@ static PyObject *__pyx_pf_14network_finder_14network_finder_13NetworkFinder_2add
       __pyx_t_7 = __pyx_t_8;
       goto __pyx_L7_bool_binop_done;
     }
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_existing, __pyx_n_s_data); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 146; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_existing, __pyx_n_s_data_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 146; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_8 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 146; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -4524,12 +4524,12 @@ static PyObject *__pyx_pf_14network_finder_14network_finder_13NetworkFinder_2add
 
       /* "network_finder/network_finder.py":147
  *             existing = self._network_list[i - 1]
- *             if data and existing.data:
- *                 existing.data.update(data)             # <<<<<<<<<<<<<<
+ *             if data and existing._data:
+ *                 existing._data.update(data)             # <<<<<<<<<<<<<<
  *             elif data:
- *                 existing.data = data
+ *                 existing._data = data
  */
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_existing, __pyx_n_s_data); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_existing, __pyx_n_s_data_2); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_6);
       __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_update); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
       __Pyx_GOTREF(__pyx_t_5);
@@ -4564,37 +4564,37 @@ static PyObject *__pyx_pf_14network_finder_14network_finder_13NetworkFinder_2add
       /* "network_finder/network_finder.py":146
  *         if i and network == self._network_list[i - 1]:
  *             existing = self._network_list[i - 1]
- *             if data and existing.data:             # <<<<<<<<<<<<<<
- *                 existing.data.update(data)
+ *             if data and existing._data:             # <<<<<<<<<<<<<<
+ *                 existing._data.update(data)
  *             elif data:
  */
       goto __pyx_L6;
     }
 
     /* "network_finder/network_finder.py":148
- *             if data and existing.data:
- *                 existing.data.update(data)
+ *             if data and existing._data:
+ *                 existing._data.update(data)
  *             elif data:             # <<<<<<<<<<<<<<
- *                 existing.data = data
+ *                 existing._data = data
  *             return existing
  */
     __pyx_t_7 = __Pyx_PyObject_IsTrue(__pyx_v_data); if (unlikely(__pyx_t_7 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     if (__pyx_t_7) {
 
       /* "network_finder/network_finder.py":149
- *                 existing.data.update(data)
+ *                 existing._data.update(data)
  *             elif data:
- *                 existing.data = data             # <<<<<<<<<<<<<<
+ *                 existing._data = data             # <<<<<<<<<<<<<<
  *             return existing
  * 
  */
-      if (__Pyx_PyObject_SetAttrStr(__pyx_v_existing, __pyx_n_s_data, __pyx_v_data) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      if (__Pyx_PyObject_SetAttrStr(__pyx_v_existing, __pyx_n_s_data_2, __pyx_v_data) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
       /* "network_finder/network_finder.py":148
- *             if data and existing.data:
- *                 existing.data.update(data)
+ *             if data and existing._data:
+ *                 existing._data.update(data)
  *             elif data:             # <<<<<<<<<<<<<<
- *                 existing.data = data
+ *                 existing._data = data
  *             return existing
  */
     }
@@ -4602,7 +4602,7 @@ static PyObject *__pyx_pf_14network_finder_14network_finder_13NetworkFinder_2add
 
     /* "network_finder/network_finder.py":150
  *             elif data:
- *                 existing.data = data
+ *                 existing._data = data
  *             return existing             # <<<<<<<<<<<<<<
  * 
  *         self._network_list.insert(i, network)
@@ -4617,7 +4617,7 @@ static PyObject *__pyx_pf_14network_finder_14network_finder_13NetworkFinder_2add
  *         i = bisect_right(self._network_list, network)
  *         if i and network == self._network_list[i - 1]:             # <<<<<<<<<<<<<<
  *             existing = self._network_list[i - 1]
- *             if data and existing.data:
+ *             if data and existing._data:
  */
   }
 

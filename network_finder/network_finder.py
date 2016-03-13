@@ -143,10 +143,10 @@ class NetworkFinder(object):
         i = bisect_right(self._network_list, network)
         if i and network == self._network_list[i - 1]:
             existing = self._network_list[i - 1]
-            if data and existing.data:
-                existing.data.update(data)
+            if data and existing._data:
+                existing._data.update(data)
             elif data:
-                existing.data = data
+                existing._data = data
             return existing
 
         self._network_list.insert(i, network)
