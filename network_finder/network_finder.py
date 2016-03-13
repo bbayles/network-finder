@@ -76,6 +76,12 @@ class BaseIPNetwork(object):
             self.net_int <= other.net_int <= other.bcast_int <= self.bcast_int
         )
 
+    def __getattr__(self, attr):
+        try:
+            return self.data[attr]
+        except KeyError:
+            raise AttributeError(attr)
+
     def __repr__(self):
         return "{}('{}/{}')".format(
             self.__class__.__name__, self.network_address, self.length

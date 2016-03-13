@@ -237,6 +237,17 @@ class IPNetworkTests(TestCase):
             self.assertEqual(IPv6Network.ip_to_int(ip_str), ip_int)
             self.assertEqual(IPv6Network.ip_from_int(ip_int), ip_str)
 
+    def test_attributes(self):
+        v4_net = IPv4Network('192.0.2.0/24', data={'key_1': 'value_1'})
+        self.assertEqual(v4_net.key_1, 'value_1')
+        with self.assertRaises(AttributeError):
+            v4_net.key_2
+
+        v6_net = IPv6Network('2001:db8::/32', data={'key_1': 'value_1'})
+        self.assertEqual(v6_net.key_1, 'value_1')
+        with self.assertRaises(AttributeError):
+            v6_net.key_2
+
     def test_repr(self):
         v4_net = IPv4Network('192.0.2.0/24')
         v4_str = repr(v4_net)
