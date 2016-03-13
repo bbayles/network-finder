@@ -20,7 +20,7 @@ def ip_mask(length, bits):
 
 @total_ordering
 class BaseIPNetwork(object):
-    __slots__ = ['net_int', 'bcast_int', 'length', 'data']
+    __slots__ = ['net_int', 'bcast_int', 'length', '_data']
 
     def __init__(self, cidr, data=None):
         if isinstance(cidr, integer_types):
@@ -37,13 +37,16 @@ class BaseIPNetwork(object):
 
             net_int = self.ip_to_int(cidr[0])
 
+        if (data is not None) and (not isinstance(data, dict)):
+            raise ValueError('data argument must be a dict')
+
         mask_int = self.mask_cache[length]
         span = (1 << (self.bits - length)) - 1
 
         self.length = length
         self.net_int = net_int & mask_int
         self.bcast_int = self.net_int + span
-        self.data = data
+        self._data = data
 
     @property
     def network_address(self):
@@ -75,6 +78,20 @@ class BaseIPNetwork(object):
         return (
             self.net_int <= other.net_int <= other.bcast_int <= self.bcast_int
         )
+
+    def __getattr__(self, attr):
+        try:
+            return self._data[attr]
+        except (TypeError, KeyError):
+            raise AttributeError(attr)
+
+    def __setattr__(self, attr, value):
+        try:
+            return super(BaseIPNetwork, self).__setattr__(attr, value)
+        except AttributeError:
+            if self._data is None:
+                self._data = {}
+            self._data[attr] = value
 
     def __repr__(self):
         return "{}('{}/{}')".format(
@@ -134,10 +151,10 @@ class NetworkFinder(object):
         i = bisect_right(self._network_list, network)
         if i and network == self._network_list[i - 1]:
             existing = self._network_list[i - 1]
-            if data and existing.data:
-                existing.data.update(data)
+            if data and existing._data:
+                existing._data.update(data)
             elif data:
-                existing.data = data
+                existing._data = data
             return existing
 
         self._network_list.insert(i, network)
