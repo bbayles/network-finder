@@ -15,7 +15,7 @@ else:
 
 setup(
     name='network_finder',
-    version='0.3',
+    version='0.4',
     license='MIT',
     url='https://github.com/bbayles/network-finder',
 
