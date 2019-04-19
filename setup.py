@@ -15,7 +15,7 @@ else:
 
 setup(
     name='network_finder',
-    version='0.4',
+    version='0.5',
     license='MIT',
     url='https://github.com/bbayles/network-finder',
 
@@ -35,9 +35,7 @@ setup(
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3',
     ],
 
     packages=find_packages(include=['network_finder']),
