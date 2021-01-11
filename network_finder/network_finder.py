@@ -60,10 +60,7 @@ class BaseIPNetwork(object):
         return hash((self.net_int, self.length))
 
     def __eq__(self, other):
-        return (
-            self.net_int == other.net_int and
-            self.length == other.length
-        )
+        return self.net_int == other.net_int and self.length == other.length
 
     def __lt__(self, other):
         if self.net_int < other.net_int:
@@ -125,14 +122,17 @@ class IPv6Network(BaseIPNetwork):
 
     @staticmethod
     def ip_to_int(
-        ip, unpack=ipv6_struct.unpack, inet_pton=inet_pton, af=AF_INET6,
+        ip,
+        unpack=ipv6_struct.unpack,
+        inet_pton=inet_pton,
+        af=AF_INET6,
     ):
         unpacked = unpack(inet_pton(af, ip))
         return (unpacked[0] << 64) | unpacked[1]
 
     @staticmethod
     def ip_from_int(ip_int, pack=ipv6_struct.pack, af=AF_INET6):
-        return inet_ntop(af, pack(ip_int >> 64, ip_int & 0xffffffffffffffff))
+        return inet_ntop(af, pack(ip_int >> 64, ip_int & 0xFFFFFFFFFFFFFFFF))
 
 
 class NetworkFinder(object):

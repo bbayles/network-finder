@@ -15,37 +15,37 @@ class IPNetworkTests(TestCase):
         ipv4_masks = [
             (0, 0x00000000),
             (1, 0x80000000),
-            (2, 0xc0000000),
-            (3, 0xe0000000),
-            (4, 0xf0000000),
-            (5, 0xf8000000),
-            (6, 0xfc000000),
-            (7, 0xfe000000),
-            (8, 0xff000000),
-            (9, 0xff800000),
-            (10, 0xffc00000),
-            (11, 0xffe00000),
-            (12, 0xfff00000),
-            (13, 0xfff80000),
-            (14, 0xfffc0000),
-            (15, 0xfffe0000),
-            (16, 0xffff0000),
-            (17, 0xffff8000),
-            (18, 0xffffc000),
-            (19, 0xffffe000),
-            (20, 0xfffff000),
-            (21, 0xfffff800),
-            (22, 0xfffffc00),
-            (23, 0xfffffe00),
-            (24, 0xffffff00),
-            (25, 0xffffff80),
-            (26, 0xffffffc0),
-            (27, 0xffffffe0),
-            (28, 0xfffffff0),
-            (29, 0xfffffff8),
-            (30, 0xfffffffc),
-            (31, 0xfffffffe),
-            (32, 0xffffffff),
+            (2, 0xC0000000),
+            (3, 0xE0000000),
+            (4, 0xF0000000),
+            (5, 0xF8000000),
+            (6, 0xFC000000),
+            (7, 0xFE000000),
+            (8, 0xFF000000),
+            (9, 0xFF800000),
+            (10, 0xFFC00000),
+            (11, 0xFFE00000),
+            (12, 0xFFF00000),
+            (13, 0xFFF80000),
+            (14, 0xFFFC0000),
+            (15, 0xFFFE0000),
+            (16, 0xFFFF0000),
+            (17, 0xFFFF8000),
+            (18, 0xFFFFC000),
+            (19, 0xFFFFE000),
+            (20, 0xFFFFF000),
+            (21, 0xFFFFF800),
+            (22, 0xFFFFFC00),
+            (23, 0xFFFFFE00),
+            (24, 0xFFFFFF00),
+            (25, 0xFFFFFF80),
+            (26, 0xFFFFFFC0),
+            (27, 0xFFFFFFE0),
+            (28, 0xFFFFFFF0),
+            (29, 0xFFFFFFF8),
+            (30, 0xFFFFFFFC),
+            (31, 0xFFFFFFFE),
+            (32, 0xFFFFFFFF),
         ]
         for length, mask_int in ipv4_masks:
             self.assertEqual(ip_mask(length, bits=32), mask_int)
@@ -57,19 +57,19 @@ class IPNetworkTests(TestCase):
     def test_ip_mask_v6(self):
         # See: https://en.wikipedia.org/wiki/IPv6_subnetting_reference
         ipv6_masks = [
-            (12, 0xfff00000000000000000000000000000),
-            (20, 0xfffff000000000000000000000000000),
-            (24, 0xffffff00000000000000000000000000),
-            (28, 0xfffffff0000000000000000000000000),
-            (32, 0xffffffff000000000000000000000000),
-            (36, 0xfffffffff00000000000000000000000),
-            (48, 0xffffffffffff00000000000000000000),
-            (52, 0xfffffffffffff0000000000000000000),
-            (56, 0xffffffffffffff000000000000000000),
-            (60, 0xfffffffffffffff00000000000000000),
-            (64, 0xffffffffffffffff0000000000000000),
-            (127, 0xfffffffffffffffffffffffffffffffe),
-            (128, 0xffffffffffffffffffffffffffffffff),
+            (12, 0xFFF00000000000000000000000000000),
+            (20, 0xFFFFF000000000000000000000000000),
+            (24, 0xFFFFFF00000000000000000000000000),
+            (28, 0xFFFFFFF0000000000000000000000000),
+            (32, 0xFFFFFFFF000000000000000000000000),
+            (36, 0xFFFFFFFFF00000000000000000000000),
+            (48, 0xFFFFFFFFFFFF00000000000000000000),
+            (52, 0xFFFFFFFFFFFFF0000000000000000000),
+            (56, 0xFFFFFFFFFFFFFF000000000000000000),
+            (60, 0xFFFFFFFFFFFFFFF00000000000000000),
+            (64, 0xFFFFFFFFFFFFFFFF0000000000000000),
+            (127, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE),
+            (128, 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF),
         ]
         for length, mask_int in ipv6_masks:
             self.assertEqual(ip_mask(length, bits=128), mask_int)
@@ -97,7 +97,10 @@ class IPNetworkTests(TestCase):
         self.assertEqual(net.broadcast_address, '192.0.2.255')
 
         for bad_arg in (
-            '192..2', '192.0.2.256', '192.0.2.1/33', '192.0.2.0/24/24'
+            '192..2',
+            '192.0.2.256',
+            '192.0.2.1/33',
+            '192.0.2.0/24/24',
         ):
             with self.assertRaises(Exception):
                 IPv4Network(bad_arg)
@@ -108,20 +111,20 @@ class IPNetworkTests(TestCase):
     def test_init_v6(self):
         for host_addr in (
             '2001:0db8::',
-            0x20010db8000000000000000000000000,
+            0x20010DB8000000000000000000000000,
         ):
             host = IPv6Network(host_addr)
-            self.assertEqual(host.net_int, 0x20010db8000000000000000000000000)
+            self.assertEqual(host.net_int, 0x20010DB8000000000000000000000000)
             self.assertEqual(
-                host.bcast_int, 0x20010db8000000000000000000000000
+                host.bcast_int, 0x20010DB8000000000000000000000000
             )
             self.assertEqual(host.length, 128)
             self.assertEqual(host.network_address, '2001:db8::')
             self.assertEqual(host.broadcast_address, '2001:db8::')
 
         net = IPv6Network('2001:0db8::/32')
-        self.assertEqual(net.net_int, 0x20010db8000000000000000000000000)
-        self.assertEqual(net.bcast_int, 0x20010db8ffffffffffffffffffffffff)
+        self.assertEqual(net.net_int, 0x20010DB8000000000000000000000000)
+        self.assertEqual(net.bcast_int, 0x20010DB8FFFFFFFFFFFFFFFFFFFFFFFF)
         self.assertEqual(net.length, 32)
         self.assertEqual(net.network_address, '2001:db8::')
         self.assertEqual(
@@ -147,9 +150,7 @@ class IPNetworkTests(TestCase):
         self.assertEqual(len(v6_net_set), 2)
 
     def test_eq(self):
-        self.assertEqual(
-            IPv4Network('192.0.2.0'), IPv4Network('192.0.2.0/32')
-        )
+        self.assertEqual(IPv4Network('192.0.2.0'), IPv4Network('192.0.2.0/32'))
         self.assertNotEqual(
             IPv4Network('192.0.2.0/24'), IPv4Network('192.0.2.0/25')
         )
@@ -192,7 +193,9 @@ class IPNetworkTests(TestCase):
         v6_net_list.sort()
         actual = [str(x) for x in v6_net_list]
         expected = [
-            '2001:db8::/32', '2001:db8::/64', '2001:db8::/128',
+            '2001:db8::/32',
+            '2001:db8::/64',
+            '2001:db8::/128',
         ]
         self.assertEqual(actual, expected)
 
@@ -232,11 +235,11 @@ class IPNetworkTests(TestCase):
             self.assertEqual(IPv4Network.ip_from_int(ip_int), ip_str)
 
         v6_cases = [
-            ('2001:db8::', 0x20010db8000000000000000000000000),
-            ('2001:db8::1', 0x20010db8000000000000000000000001),
+            ('2001:db8::', 0x20010DB8000000000000000000000000),
+            ('2001:db8::1', 0x20010DB8000000000000000000000001),
             (
                 '2001:db8:ffff:ffff:ffff:ffff:ffff:ffff',
-                0x20010db8ffffffffffffffffffffffff,
+                0x20010DB8FFFFFFFFFFFFFFFFFFFFFFFF,
             ),
         ]
         for ip_str, ip_int in v6_cases:
@@ -426,9 +429,7 @@ class NetworkFinderTests(TestCase):
         )
 
         inst.delete('fd00::/32')
-        self.assertEqual(
-            inst._network_list, [slash_16, slash_48, slash_64]
-        )
+        self.assertEqual(inst._network_list, [slash_16, slash_48, slash_64])
 
         self.assertEqual(inst.search_exact('fd00::/64'), slash_64)
         self.assertIsNone(inst.search_exact('fd00:0001::/64'))
